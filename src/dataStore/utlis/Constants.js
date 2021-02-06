@@ -10,4 +10,14 @@ export const Constants = {
     GET_ALL_USERS_LOADING: "GET_ALL_USERS_LOADING",
     GET_ALL_USERS: "GET_ALL_USERS",
     GET_ALL_USERS_ERROR: "GET_ALL_USERS_ERROR",
+
+    SNACK:"SNACK",
+    SNACK_OPEN:"SNACK_OPEN",
+    SNACK_CLOSE:"SNACK_CLOSE",
+
+    SNACK_ERROR: "error",
+    SNACK_SUCCESS: "success",
+    SNACK_WARNING: "warning",
+
+    USER_DATA:"USER_DATA",
 }

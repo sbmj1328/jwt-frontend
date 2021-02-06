@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { Button } from "@material-ui/core";
 import { ExitToApp } from "@material-ui/icons";
@@ -10,6 +10,9 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+
+import { useSelector, useDispatch } from "react-redux";
+import { homeAction } from "../../dataStore/redux/action/home-action";
 
 const HomeContainer = styled.div`
   width: 100vw;
@@ -51,6 +54,8 @@ const WelcomeText = styled.p`
 const MyTableContainer = styled.div`
   margin: 10px 30px;
   border: 1px solid gray;
+  max-height: 70vh;
+  overflow-x: auto;
 `;
 
 const MyTableCell = styled(TableCell)`
@@ -88,15 +93,28 @@ const dummyData = [
 
 // Home Component
 export default function Home() {
+  const dispatch = useDispatch();
+  const { userDataReducer, homeReducer } = useSelector((state) => state);
+
+  useEffect(() => {
+    console.log("qwe zxc", userDataReducer);
+    dispatch(homeAction(userDataReducer?.token));
+  }, []);
+
+  const logout = () => {
+    window.localStorage.clear();
+    window.location.href = "/";
+  };
+
   return (
     <HomeContainer>
       <HomeHeader>
-        <LogoutBtn startIcon={<ExitToApp />} onClick={() => {}}>
+        <LogoutBtn startIcon={<ExitToApp />} onClick={logout}>
           Logout
         </LogoutBtn>
       </HomeHeader>
       <HomeBody>
-        <WelcomeText>Welcome</WelcomeText>
+        <WelcomeText>{`Welcome ${userDataReducer?.user?.name} `} </WelcomeText>
         <MyTableContainer>
           <TableContainer component={Paper}>
             <Table
@@ -110,7 +128,7 @@ export default function Home() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {dummyData.map((row) => (
+                {homeReducer?.data?.users?.map((row) => (
                   <TableRow key={row.name}>
                     <TableCell component="th" scope="row">
                       {row.name}

@@ -108,11 +108,12 @@ export default function Login() {
   }, [errors]);
 
   const submitRegister = () => {
-    setError({});
-    dispatch(registerAction(state), () => {
-      history.push("/auth/login");
-      setSubmiting(false);
-    });
+    dispatch(
+      registerAction(state, () => {
+        history.push("/auth/login");
+        setSubmiting(false);
+      })
+    );
   };
 
   const regValidate = () => {
@@ -191,7 +192,7 @@ export default function Login() {
               labelWidth={40}
             />
             <ErrorHelper className="auth_helper_text">
-              {errors?.email}{" "}
+              {errors?.email}
             </ErrorHelper>
           </FormCtrl>
 

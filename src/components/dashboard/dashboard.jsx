@@ -7,16 +7,40 @@ import {
 } from "react-router-dom";
 import { Login, Home, Register } from "../screens";
 import { useDispatch, useSelector } from "react-redux";
+import MuiAlert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 // Dashboard Component
 export default function Dashboard() {
-  const { loginReducer } = useSelector((state) => state);
+  const { userDataReducer, showSnack } = useSelector((state) => state);
+  const dispatch = useDispatch();
   useEffect(() => {
-    console.log("my dashboard ", loginReducer.data);
+    console.log("my dashboard ", userDataReducer);
   }, []);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    dispatch({
+      type: "SNACK_CLOSE",
+    });
+  };
+
   return (
     <Router>
-      {loginReducer.data ? (
+      <Snackbar
+        open={showSnack.show}
+        autoHideDuration={2000}
+        onClose={handleClose}
+      >
+        <Alert severity={showSnack.severity}>{showSnack.message}</Alert>
+      </Snackbar>
+      {!userDataReducer.token ? (
         <Switch>
           <Route
             path="/auth"

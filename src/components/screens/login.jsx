@@ -85,6 +85,14 @@ const LoginBox = styled(Box)`
   }
 `;
 
+const ErrorHelper = styled.p`
+  color: red;
+  text-align: left;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-left: 5px;
+`;
+
 // Login Component
 export default function Login() {
   const history = useHistory();
@@ -98,6 +106,8 @@ export default function Login() {
   const [errors, setError] = useState({});
   const [isSubmitting, setSubmiting] = useState(false);
 
+  console.log("my login ", loginReducer);
+
   useEffect(() => {
     if (Object.keys(errors).length === 0 && isSubmitting) {
       submitLogin();
@@ -105,7 +115,6 @@ export default function Login() {
   }, [errors]);
 
   const submitLogin = () => {
-    setError({});
     dispatch(loginAction(state), () => {
       history.push("/home");
       setSubmiting(false);
@@ -158,7 +167,9 @@ export default function Login() {
               onChange={(e) => handleChange(e, "email")}
               labelWidth={40}
             />
-            <p className="auth_helper_text">{errors?.email} </p>
+            <ErrorHelper className="auth_helper_text">
+              {errors?.email}{" "}
+            </ErrorHelper>
           </FormCtrl>
 
           <FormCtrl variant="outlined" className="textfield_custom_auth">
@@ -183,7 +194,9 @@ export default function Login() {
               }
               labelWidth={70}
             />
-            <p className="auth_helper_text">{errors?.password} </p>
+            <ErrorHelper className="auth_helper_text">
+              {errors?.password}{" "}
+            </ErrorHelper>
           </FormCtrl>
           <br />
           <br />
