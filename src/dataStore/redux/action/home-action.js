@@ -14,6 +14,7 @@ export const homeAction = (token) => async (dispatch) => {
   try {
     MyAxios.defaults.headers = header(token);
     const response = await MyAxios.get("users");
+    console.log("my loggers log", response);
     if (response.status === 200) {
       dispatch(pass(Constants.GET_ALL_USERS, response.data));
     } else {
@@ -21,18 +22,26 @@ export const homeAction = (token) => async (dispatch) => {
       dispatch(
         pass(Constants.SNACK, {
           severity: Constants.SNACK_ERROR,
-          message: "Failed",
+          message: "Failed to get users",
         })
       );
     }
   } catch (err) {
-    console.log("GET_ALL_USERS error", err);
     dispatch(pass(Constants.GET_ALL_USERS_ERROR, err?.message));
-    dispatch(
-      pass(Constants.SNACK, {
-        severity: Constants.SNACK_ERROR,
-        message: "Failed",
-      })
-    );
+    if (err.response.status === 403) {
+      dispatch(
+        pass(Constants.SNACK, {
+          severity: Constants.SNACK_ERROR,
+          message: err.response.data.error,
+        })
+      );
+    } else {
+      dispatch(
+        pass(Constants.SNACK, {
+          severity: Constants.SNACK_ERROR,
+          message: "Failed",
+        })
+      );
+    }
   }
 };
